@@ -42,28 +42,63 @@
         var options2 = {
             element: document.querySelector(".player2 .video-js"),
             playListId: 1,
-            onListCreated: function(player) {
-                document.querySelector(".player2 .prev").addEventListener("click", player.prev.bind(player));
-                document.querySelector(".player2 .next").addEventListener("click", player.next.bind(player));
-            }
+            getVideoSource: getVideoSource,
+            prevBtn: document.querySelector(".player2 .prev").addEventListener("click", player.prev.bind(player)),
+            nextBtn: document.querySelector(".player2 .next").addEventListener("click", player.next.bind(player))
         };
 
         var options1 = {
             element: document.querySelector(".player1 .video-js"),
             playListId: 0,
-            onListCreated: function(player) {
-                document.querySelector(".player1 .prev").addEventListener("click", player.prev.bind(player));
-                document.querySelector(".player1 .next").addEventListener("click", player.next.bind(player));
-            }
-        };
-
-        function play(options) {
-            var player = videojs(options.element);
-            player.syncPlayList(options).then(options.onListCreated);
+            getVideoSource: getVideoSource,
+            prevBtn: document.querySelector(".player1 .prev").addEventListener("click", player.prev.bind(player)),
+            nextBtn: document.querySelector(".player1 .next").addEventListener("click", player.next.bind(player))
         };
 
         play(options1);
         play(options2);
+  
+        function play(options) {
+            var player = videojs(options.element);
+            player.syncPlayList(options).then(function(player) {
+                
+            });
+        };
+    
+        function getVideoSource(node, cb) {      
+            var player = this;
+            var emptyVideoPaths = [ { src: "/video/empty.webm" } ];
+            var src = node.src;
+            var poster = node.poster;
+            if (node.isSlide) {
+                src = emptyVideoPaths;
+                showImage(player, poster);
+            } else {
+                hideImage(player);
+            }
+            cb(src, poster);
+        }
+
+        function showImage(player, imgPath) {
+            var container = player.el().querySelector(".image_container");
+            if (!container) {
+                container = document.createElement("div");
+                container.className = "image_container";
+                var img = document.createElement("img");
+                img.className = "video_image";
+                container.appendChild(img);
+                player.el().appendChild(container);
+            }
+            container.style.display = "block";
+            img.src = imgPath;
+        }
+
+        function hideImage(player) {
+            var container = player.el().querySelector(".image_container");
+            if (container) {
+                container.style.display = "none";
+            }
+        }
     </script>
 </body>
 </html>

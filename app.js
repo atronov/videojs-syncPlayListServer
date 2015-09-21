@@ -6,7 +6,7 @@ var express = require('express'),
     playlist = require("./routes/playlist"),
     app = express();
 
-app.get('/', express.static(path.join(__dirname, "public")));
+app.use('/', express.static(path.join(__dirname, "public")));
 
 // тут лежат видео-файлы
 app.use("/video", express.static(path.join(__dirname, "video")));

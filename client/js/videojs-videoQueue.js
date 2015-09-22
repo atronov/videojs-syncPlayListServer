@@ -45,6 +45,20 @@ var videoQueue = (function(window) {
 			slide = document.createElement("div");
 			slide.className = "slide-image";
 			player.el().appendChild(slide);
+			slide.addEventListener("click", function(e) {
+				if (player.paused()) {
+					player.play();
+				} else {
+					player.pause();
+				}
+			});
+			slide.addEventListener("dblclick", function(e) {
+				if (player.isFullscreen()) {
+					player.exitFullscreen();
+				} else {
+					player.requestFullscreen();
+				}
+			});
 		}
 		slide.style.display = "block";
 		slide.style.backgroundImage = "url("+imgPath+")";

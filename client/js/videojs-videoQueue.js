@@ -3,8 +3,8 @@
  * @return {Promise} Same return as for getVideoSource plugin
  */
 var videoQueue = (function(window) {
-	
 	'use strict';
+	
 	var document = window.document;
 	
 	var stylesAppended = false;
@@ -40,42 +40,35 @@ var videoQueue = (function(window) {
 	}
 	
 	function showImage(player, imgPath) {
-		var container = player.el().querySelector(".image_container");
-		if (!container) {
-			container = document.createElement("div");
-			container.className = "image_container";
-			var img = document.createElement("img");
-			img.className = "video_image";
-			container.appendChild(img);
-			player.el().appendChild(container);
-		} else {
-			img = container.querySelector(".video_image");
+		var slide = player.el().querySelector(".slide-image");
+		if (!slide) {
+			slide = document.createElement("div");
+			slide.className = "slide-image";
+			player.el().appendChild(slide);
 		}
-		container.style.display = "block";
-		img.src = imgPath;
+		slide.style.display = "block";
+		slide.style.backgroundImage = "url("+imgPath+")";
 	}
 	
 	function hideImage(player) {
-		var container = player.el().querySelector(".image_container");
-		if (container) {
-			container.style.display = "none";
+		var slide = player.el().querySelector(".slide-image");
+		if (slide) {
+			slide.style.display = "none";
 		}
 	}
 	
 	function appendStyle() {
 		if (!stylesAppended) {
 			var css = '\
-			.image_container {\
+			.slide-image {\
 				position: absolute;\
 				top: 0; left: 0; width: 100%; height: 100%;\
-				text-align: center;\
-        	}\
-        	.video_image {\
-				max-height: 100%; max-width: 100%;\
-				height: auto;\
-        	}',
-			head = document.head || document.getElementsByTagName('head')[0],
-			style = document.createElement('style');
+				background-size: contain;\
+				background-position: center;\
+				background-repeat: no-repeat;\
+        	}';
+			var head = document.head || document.getElementsByTagName('head')[0],
+				style = document.createElement('style');
 		
 			style.type = 'text/css';
 			if (style.styleSheet){
@@ -85,7 +78,7 @@ var videoQueue = (function(window) {
 			}
 			
 			head.appendChild(style);
-			stylesAppended = true;s
+			stylesAppended = true;
 		}
 	}
 })(window);
